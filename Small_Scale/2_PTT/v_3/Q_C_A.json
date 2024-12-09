@@ -1,0 +1,10 @@
+{
+    "Question": "Pretend that you are standing at the cake and facing the desk. Visualize the world around you. At what angle (from -180 to 180 degrees) is bat located relative to you? Clockwise rotations are positive and anti-clockwise rotations are negative.",
+    "Choices": {
+        "1": -19,
+        "2": 21,
+        "3": 1,
+        "4": -39
+    },
+    "Answer": "1"
+}

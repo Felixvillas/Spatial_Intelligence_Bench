@@ -1,0 +1,10 @@
+{
+    "Question": "Pretend that you are standing at the grapes and facing the donut. Visualize the world around you. At what angle (from -180 to 180 degrees) is book located relative to you? Clockwise rotations are positive and anti-clockwise rotations are negative.",
+    "Choices": {
+        "1": -17,
+        "2": -77,
+        "3": -57,
+        "4": -37
+    },
+    "Answer": "4"
+}

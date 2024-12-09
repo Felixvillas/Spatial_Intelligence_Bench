@@ -1,0 +1,10 @@
+{
+    "Question": "Pretend that you are standing at the bat and facing the book. Visualize the world around you. At what angle (from -180 to 180 degrees) is apple located relative to you? Clockwise rotations are positive and anti-clockwise rotations are negative.",
+    "Choices": {
+        "1": -35,
+        "2": -15,
+        "3": -115,
+        "4": -55
+    },
+    "Answer": "1"
+}
