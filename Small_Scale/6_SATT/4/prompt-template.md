@@ -4,7 +4,7 @@ Here is an image of a object. Let us call this the target.
 Here is a row of images. This contains multiple instances of object, but not all of them are the target object. The row is indexed from left to right, starting from 0.
 <IMAGE OF GRID>
 
-Which of these options represent the true locations of the target object in the grid? Locations are represented as (row, column).
+Which of these options represent the true locations of the target object in the grid? Locations are represented as index.
 Choice 1. 1, 2, 3, 5, 8
 Choice 2. 0, 2, 3, 7, 9
 Choice 3. 0, 3, 5, 7, 8
