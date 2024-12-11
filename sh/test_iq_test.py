@@ -1,6 +1,6 @@
 import os, json
 import openai
-model_name = "gpt-4-turbo" # gpt-4-turbo
+model_name = "gpt-4-turbo" # gpt-4o
 import sys
 sys.path.append(".")
 from config import openai_key
