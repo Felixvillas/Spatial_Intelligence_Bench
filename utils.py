@@ -13,3 +13,6 @@ def flatten(nested_list):
         else:
             flat_list.append(item)  # 如果不是列表，直接添加到结果列表中
     return flat_list
+
+def print_green(msg):
+    print("\033[92m{}\033[00m" .format(msg))

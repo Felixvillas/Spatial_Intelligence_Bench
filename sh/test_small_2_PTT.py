@@ -70,11 +70,11 @@ for specific_task in tqdm.tqdm(os.listdir(task_path)):
         ]
     )
     
-    os.makedirs(os.path.join("logs", task_path, current_time), exist_ok=True)
+    os.makedirs(os.path.join("logs", "Small_Scale", model_name, task, current_time), exist_ok=True)
     # save completion
-    with open(os.path.join("logs", task_path, current_time, f"{specific_task}_completion.json"), "w") as f:
-        json.dump(completion.model_dump_json(), f, indent=4)
+    with open(os.path.join("logs", "Small_Scale", model_name, task, current_time, f"{specific_task}_completion.json"), "w") as f:
+        json.dump(completion.model_dump_json(indent=4), f, indent=4)
     # save response
-    with open(os.path.join("logs", task_path, current_time, f"{specific_task}_response.md"), "w") as f:
+    with open(os.path.join("logs", "Small_Scale", model_name, task, current_time, f"{specific_task}_response.md"), "w") as f:
         f.write(completion.choices[0].message.content)
         
