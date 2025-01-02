@@ -1,12 +1,30 @@
 import os, json
 import openai
-model_name = "gpt-4-turbo" # gpt-4o
+model_name = "/lustre/S/tianzikang/LLMs/mistralai-Pixtral-12B-2409/mistralai-Pixtral-12B-2409/" # gpt-4o, gpt-4-turbo
+if os.path.isdir(model_name):
+    model_name_split = model_name.split("/")
+    log_model_name = model_name_split[-1] if model_name_split[-1] else model_name_split[-2]
+else:
+    log_model_name = model_name
 import sys
 sys.path.append(".")
-from config import openai_key
-openai.api_key = openai_key
-os.environ['HTTP_PROXY'] = 'http://127.0.0.1:7890'
-os.environ['HTTPS_PROXY'] = 'http://127.0.0.1:7890'
+if "gpt" in model_name:
+    from config import openai_key
+    openai.api_key = openai_key
+    os.environ['HTTP_PROXY'] = 'http://127.0.0.1:7890'
+    os.environ['HTTPS_PROXY'] = 'http://127.0.0.1:7890'
+    client = openai
+else:
+    from openai import OpenAI
+    openai.api_key = "0"
+    os.environ['HTTP_PROXY'] = 'http://127.0.0.1:8000'
+    os.environ['HTTPS_PROXY'] = 'http://127.0.0.1:8000'
+    openai_api_key = "EMPTY"
+    openai_api_base = "http://localhost:8000/v1"
+    client = OpenAI(
+        api_key=openai_api_key,
+        base_url=openai_api_base,
+    )
 
 from copy import deepcopy
 from utils import encode_image, flatten
@@ -61,7 +79,7 @@ for specific_task in tqdm.tqdm(os.listdir(task_path)):
     assert len(specific_prompt) == len(placeholders) + 1, f"Invalid number of placeholders: {len(specific_prompt)}"
     # breakpoint()
     # request openai
-    completion = openai.chat.completions.create(
+    completion = client.chat.completions.create(
         model=model_name,
         messages=[
             {
@@ -116,11 +134,11 @@ for specific_task in tqdm.tqdm(os.listdir(task_path)):
         ]
     )
     
-    os.makedirs(os.path.join("logs", "Small_Scale", model_name, task, current_time), exist_ok=True)
+    os.makedirs(os.path.join("logs", "Small_Scale", log_model_name, task, current_time), exist_ok=True)
     # save completion
-    with open(os.path.join("logs", "Small_Scale", model_name, task, current_time, f"{specific_task}_completion.json"), "w") as f:
+    with open(os.path.join("logs", "Small_Scale", log_model_name, task, current_time, f"{specific_task}_completion.json"), "w") as f:
         json.dump(completion.model_dump_json(indent=4), f, indent=4)
     # save response
-    with open(os.path.join("logs", "Small_Scale", model_name, task, current_time, f"{specific_task}_response.md"), "w") as f:
+    with open(os.path.join("logs", "Small_Scale", log_model_name, task, current_time, f"{specific_task}_response.md"), "w") as f:
         f.write(completion.choices[0].message.content)
         
