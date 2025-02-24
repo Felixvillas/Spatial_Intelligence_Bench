@@ -45,8 +45,8 @@ os.makedirs(os.path.join("logs", "MRT", log_model_name, current_time), exist_ok=
 log_file = open(os.path.join("logs", "MRT", log_model_name, current_time, "log.md"), "w")
 
 for idx, specific_task in enumerate(tqdm.tqdm(os.listdir(task_path))):
-    if idx > 10:
-        break
+    # if idx > 10:
+    #     break
     # if specific_task is not a directory, skip
     if not os.path.isdir(os.path.join(task_path, specific_task)):
         continue
