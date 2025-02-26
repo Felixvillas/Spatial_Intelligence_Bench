@@ -44,9 +44,8 @@ task_path = os.path.join("/nfs_global/S/tianzikang/project_data/spatial_intellig
 os.makedirs(os.path.join("logs", "MRT", log_model_name, current_time), exist_ok=True)
 log_file = open(os.path.join("logs", "MRT", log_model_name, current_time, "log.md"), "w")
 
-for idx, specific_task in enumerate(tqdm.tqdm(os.listdir(task_path))):
-    # if idx > 10:
-    #     break
+test_task_num = 100
+for idx, specific_task in enumerate(tqdm.tqdm(os.listdir(task_path)[:test_task_num])):
     # if specific_task is not a directory, skip
     if not os.path.isdir(os.path.join(task_path, specific_task)):
         continue
@@ -124,4 +123,16 @@ for idx, specific_task in enumerate(tqdm.tqdm(os.listdir(task_path))):
     log_file.write("-" * 20 + f"Task {idx}" + "-" * 20 + "\n")
     log_file.write(f"Response: {content}\n")
     
+    student_answer_start_idx = content.find("<answer>")
+    student_answer_end_idx = content.find("</answer>")
+    student_answer = content[student_answer_start_idx + len("<answer>"): student_answer_end_idx]
+    
+    ground_answer = json.load(open(os.path.join(task_path, specific_task, "answer.json")))["answer"]
+    
+    if student_answer == ground_answer:
+        log_file.write("Answer Correct!\n")
+    else:
+        log_file.write("Answer Wrong!\n")
+    
+    log_file.flush()
 log_file.close()        
