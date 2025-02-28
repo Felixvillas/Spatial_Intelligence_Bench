@@ -260,82 +260,6 @@ def all_trajs_from_ls(l, max_xyz):
         assert l[2] <= max_xyz, f"l[2] should be less than or equal to {max_xyz}, but it is {l[2]}"
     except Exception as e:
         # print(e)
-        return []
-    
-    choice_candidates = [
-        ["+x", "+y", "+z", "+x"],
-        ["+x", "+y", "-z", "+x"],
-        ["+x", "-y", "+z", "+x"],
-        ["+x", "-y", "-z", "+x"],
-        ["+x", "+z", "+y", "+x"],
-        ["+x", "+z", "-y", "+x"],
-        ["+x", "-z", "+y", "+x"],
-        ["+x", "-z", "-y", "+x"],
-        ["-x", "+y", "+z", "-x"],
-        ["-x", "+y", "-z", "-x"],
-        ["-x", "-y", "+z", "-x"],
-        ["-x", "-y", "-z", "-x"],
-        ["-x", "+z", "+y", "-x"],
-        ["-x", "+z", "-y", "-x"],
-        ["-x", "-z", "+y", "-x"],
-        ["-x", "-z", "-y", "-x"],
-        ["+y", "+x", "+z", "+y"],
-        ["+y", "+x", "-z", "+y"],
-        ["+y", "-x", "+z", "+y"],
-        ["+y", "-x", "-z", "+y"],
-        ["+y", "+z", "+x", "+y"],
-        ["+y", "+z", "-x", "+y"],
-        ["+y", "-z", "+x", "+y"],
-        ["+y", "-z", "-x", "+y"],
-        ["-y", "+x", "+z", "-y"],
-        ["-y", "+x", "-z", "-y"],
-        ["-y", "-x", "+z", "-y"],
-        ["-y", "-x", "-z", "-y"],
-        ["-y", "+z", "+x", "-y"],
-        ["-y", "+z", "-x", "-y"],
-        ["-y", "-z", "+x", "-y"],
-        ["-y", "-z", "-x", "-y"],
-        ["+z", "+x", "+y", "+z"],
-        ["+z", "+x", "-y", "+z"],
-        ["+z", "-x", "+y", "+z"],
-        ["+z", "-x", "-y", "+z"],
-        ["+z", "+y", "+x", "+z"],
-        ["+z", "+y", "-x", "+z"],
-        ["+z", "-y", "+x", "+z"],
-        ["+z", "-y", "-x", "+z"],
-        ["-z", "+x", "+y", "-z"],
-        ["-z", "+x", "-y", "-z"],
-        ["-z", "-x", "+y", "-z"],
-        ["-z", "-x", "-y", "-z"],
-        ["-z", "+y", "+x", "-z"],
-        ["-z", "+y", "-x", "-z"],
-        ["-z", "-y", "+x", "-z"],
-        ["-z", "-y", "-x", "-z"],
-    ]
-    trajs = []
-    for idx, choice in enumerate(choice_candidates):
-        traj = tarjs_from_ls(l1, choice=choice)
-        same_traj = False
-        for item in trajs:
-            if is_same_traj(np.array(item), np.array(traj)):
-                same_traj = True
-                break
-        if same_traj:
-            continue
-        trajs.append(deepcopy(traj))
-    return trajs
-
-def all_trajs_from_ls_v1(l, max_xyz):
-    
-    # item in l should be greater than or equal to 2
-    try:
-        assert all([item >= 2 for item in l]), f"all items in l should be greater than or equal to 2, l: {l}"
-        # boundary check
-        assert l[0] + l[3] <= max_xyz, f"l[0] + l[3] should be less than or equal to {max_xyz}, but it is {l[0] + l[3]}"
-        assert l[1] <= max_xyz, f"l[1] should be less than or equal to {max_xyz}, but it is {l[1]}"
-        assert l[2] <= max_xyz, f"l[2] should be less than or equal to {max_xyz}, but it is {l[2]}"
-    except Exception as e:
-        # print(e)
         return [], []
     
     choice_candidates = [
@@ -411,7 +335,7 @@ adds = all_adds(number_of_blocks)
 print(len(adds))
 datas = []
 for a in adds:
-    trajs_1, trajs_2 = all_trajs_from_ls_v1(a, max_xyz=7)
+    trajs_1, trajs_2 = all_trajs_from_ls(a, max_xyz=7)
     if len(trajs_1) == 0 or len(trajs_2) == 0:
         continue
     
