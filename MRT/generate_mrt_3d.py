@@ -246,9 +246,6 @@ def all_adds(total):
     
     return set(a)
 
-
-l1 = [3, 7, 7, 4] # 0-15
-
 def all_trajs_from_ls(l, max_xyz):
     
     # item in l should be greater than or equal to 2
@@ -314,10 +311,10 @@ def all_trajs_from_ls(l, max_xyz):
     ]
     trajs_1 = []
     trajs_2 = []
-    traj_reference = tarjs_from_ls(l1, choice=choice_candidates[0])
+    traj_reference = tarjs_from_ls(l, choice=choice_candidates[0])
     
     for idx, choice in enumerate(choice_candidates):
-        traj = tarjs_from_ls(l1, choice=choice)
+        traj = tarjs_from_ls(l, choice=choice)
         if is_same_traj(np.array(traj_reference), np.array(traj)):
             trajs_1.append(deepcopy(traj))
         else:
