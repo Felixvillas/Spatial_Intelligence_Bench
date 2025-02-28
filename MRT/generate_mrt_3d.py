@@ -85,123 +85,155 @@ def plot_shape(elev=20, azim=30, traj=None, name = "test2.jpg"):
     plt.savefig(name)
     plt.close()
 
-# # reference
-# plot_shape(elev=30, azim=30, traj = [(3,5,0),
-#                                      (3,3,0),
-#                                      (0,3,0),
-#                                      (0,3,3),
-#                                      (0,0,3)], name='reference.jpg')
-# angles = [30,60,120,150,210,240,300,330]
-# for elev in angles:
-#     for azim in angles:
-#         plot_shape(elev=elev, azim=azim, traj = [(3,5,0),
-#                                      (3,3,0),
-#                                      (0,3,0),
-#                                      (0,3,3),
-#                                      (0,0,3)], name='refs/'+str(elev)+'_'+str(azim)+'.jpg')
-# # c1 wrong
-# # plot_shape(elev=240, azim=30, traj = [(3,0,0),
-# #                                      (3,2,0),
-# #                                      (0,2,0),
-# #                                      (0,2,3),
-# #                                      (0,5,3)], name='c1.jpg')
-
-# plot_shape(elev=30, azim=30, traj = [(3,0,0),
-#                                      (3,2,0),
-#                                      (0,2,0),
-#                                      (0,2,3),
-#                                      (0,5,3)], name='c1.jpg')
-
-# # c2 right
-# plot_shape(elev=225, azim=45, traj = [(3,5,0),
-#                                      (3,3,0),
-#                                      (0,3,0),
-#                                      (0,3,3),
-#                                      (0,0,3)], name='c2.jpg')
-# # c3 wrong
-# plot_shape(elev=30, azim=70, traj = [(3,0,0),
-#                                      (3,2,0),
-#                                      (0,2,0),
-#                                      (0,2,3),
-#                                      (0,5,3)], name='c3.jpg')
-# # c4 wrong
-# plot_shape(elev=30, azim=80, traj = [(3,0,0),
-#                                      (3,2,0),
-#                                      (0,2,0),
-#                                      (0,2,3),
-#                                      (0,5,3)], name='c4.jpg')
-# for elev in angles:
-#     for azim in angles:
-#         plot_shape(elev=elev, azim=azim, traj = [(3,0,0),
-#                                      (3,2,0),
-#                                      (0,2,0),
-#                                      (0,2,3),
-#                                      (0,5,3)], name='opts/'+str(elev)+'_'+str(azim)+'.jpg')
-        
-
 import numpy as np
 from copy import deepcopy
 import json, tqdm
-# def random_shape():
-#     lengths = [
-#         [3, 3, 3, 3],
-#         [2, 3, 3, 4],
-#         [2, 2, 4, 4],
-#         [2, 2, 3, 5],
-#         # [4, 4, 4, 4]
-#     ]
-    
-#     for l in lengths:
-#         np.random.shuffle(l)
-#         pos1 = (l[1], l[0] + l[3] - 1, 0)
-#         pos2 = (l[1], l[3], 0)
-#         pos3 = (0, l[3], 0)
-#         pos4 = (0, l[3], l[2])
-#         pos5 = (0, 0, l[2])
-#         traj = [pos1, pos2, pos3, pos4, pos5]
-        
-#         plot_shape(elev=30, azim=30, traj=traj, name='random_shapes/'+"_".join([str(item) for item in l])+'.png')
 
 
 def is_same_traj(traj1, traj2):
-    delta_traj1 = [(traj1[i+1][0]-traj1[i][0], traj1[i+1][1]-traj1[i][1], traj1[i+1][2]-traj1[i][2]) for i in range(len(traj1)-1)]
-    delta_traj2 = [(traj2[i+1][0]-traj2[i][0], traj2[i+1][1]-traj2[i][1], traj2[i+1][2]-traj2[i][2]) for i in range(len(traj2)-1)]
-    reverse_traj2 = [traj2[i] for i in range(len(traj2)-1, -1, -1)]
-    delta_reverse_traj2 = [(reverse_traj2[i+1][0]-reverse_traj2[i][0], reverse_traj2[i+1][1]-reverse_traj2[i][1], reverse_traj2[i+1][2]-reverse_traj2[i][2]) for i in range(len(reverse_traj2)-1)]
-    transpose_delta_reverse_traj2 = []
-    for item in delta_reverse_traj2:
-        if item[0] != 0:
-            transpose_delta_reverse_traj2.append((item[2], item[1], item[0]))
-        elif item[1] != 0:
-            transpose_delta_reverse_traj2.append((item[0], -item[1], item[2]))
-        elif item[2] != 0:
-            transpose_delta_reverse_traj2.append((item[2], item[1], item[0]))
+    def traverse(traj):
+        path = []
+        # for idx in range(len(traj)-2):
+            # vec1 = traj[idx + 1] - traj[idx]
+            # assert np.bool_(vec1).sum() == 1, f"should only 1 element is different from 0 in vec1, vec1: {vec1}"
+            # vec2 = traj[idx + 2] - traj[idx + 1]
+            # assert np.bool_(vec2).sum() == 1, f"should only 1 element is different from 0 in vec2, vec2: {vec2}"
             
+            # # The dot product of vector vec1 and vector vec2 should be 0.
+            # assert np.dot(vec1, vec2) == 0, f"vec1: {vec1} dot product vec2: {vec2} should be 0"
+            # # The cross product of vector vec1 and vector vec2 is 1 or -1, where 1 means turning counterclockwise and -1 means turning clockwise
+            # cross = np.cross(vec1, vec2)
+            # # Unitalized cross
+            # cross = cross / np.linalg.norm(cross)
+            # assert np.bool_(cross).sum() == 1, f"cross product of vec1: {vec1} and vec2: {vec2} should be unit vector along the x/y/z axis"
+            # cross_str = {-1: "clockwise", 1: "counterclockwise"}[cross.sum()]
+            # # find the idx of the element that is different from 0
+            # path.append(abs(vec1[np.nonzero(vec1)[0][0]]))
+            # path.append(cross_str)
+            
+        for idx in range(len(traj)-1):
+            vec = traj[idx + 1] - traj[idx]
+            assert np.bool_(vec).sum() == 1, f"should only 1 element is different from 0 in vec, vec: {vec}"
+            path.append(abs(vec[np.nonzero(vec)[0][0]]))
+            
+        vec1 = traj[1] - traj[0] # actual the x axis
+        vec2 = traj[2] - traj[1] # actual the y axis
+        z = np.cross(vec1, vec2) / np.linalg.norm(np.cross(vec1, vec2)) # actual the z axis
+        vec3 = traj[3] - traj[2] 
+        d = np.dot(vec3, z)
+        if d > 0:
+            path.extend(["+x", "+y", "+z", "+x"])
+        elif d < 0:
+            path.extend(["+x", "+y", "-z", "+x"])
+        else:
+            raise ValueError(f"d should be either greater than 0 or less than 0, but it is {d}")
+        
+        return path
     
-    return delta_traj1 == delta_traj2 or delta_traj1 == transpose_delta_reverse_traj2
+    path1 = traverse(traj1)
+    path2 = traverse(traj2)
+    path2_reversed = traverse(list(reversed(traj2)))
+    # print(f"path1: {path1}, path2: {path2}, path2_reversed: {path2_reversed}")
+    return path1 == path2 or path1 == path2_reversed
+    
 
-def tarjs_from_ls(l, choice = None):
-    # 0 is prime, 1 is mirror image
-    if choice == None or choice not in [0, 1]:
-        choice = np.random.choice([0, 1])
-    if choice == 0:
-        l_copy = [l[0], l[1] - 1, l[2] - 1, l[3] - 1]
-        pos1 = (l_copy[1], l_copy[0] + l_copy[3] - 1, 0)
-        pos2 = (l_copy[1], l_copy[3], 0)
-        pos3 = (0, l_copy[3], 0)
-        pos4 = (0, l_copy[3], l_copy[2])
-        pos5 = (0, 0, l_copy[2])
-        traj = [pos1, pos2, pos3, pos4, pos5]
-        return traj
-    elif choice == 1:
-        l_copy = [l[0], l[1] - 1, l[2] - 1, l[3] - 1]
-        pos1 = (l_copy[1], 0, 0)
-        pos2 = (l_copy[1], l_copy[0] - 1, 0)
-        pos3 = (0, l_copy[0] - 1, 0)
-        pos4 = (0, l_copy[0] - 1, l_copy[2])
-        pos5 = (0, l_copy[0] + l_copy[3] - 1, l_copy[2])
-        traj = [pos1, pos2, pos3, pos4, pos5]
-        return traj
+import random
+def tarjs_from_ls(l, choice = None, max_xyz=7):
+    
+    # item in l should be greater than or equal to 2
+    assert all([item >= 2 for item in l]), f"all items in l should be greater than or equal to 2, l: {l}"
+    # boundary check
+    assert l[0] + l[3] <= max_xyz, f"l[0] + l[3] should be less than or equal to {max_xyz}, but it is {l[0] + l[3]}"
+    assert l[1] <= max_xyz, f"l[1] should be less than or equal to {max_xyz}, but it is {l[1]}"
+    assert l[2] <= max_xyz, f"l[2] should be less than or equal to {max_xyz}, but it is {l[2]}"
+    
+    choice_candidates = [
+        ["+x", "+y", "+z", "+x"],
+        ["+x", "+y", "-z", "+x"],
+        ["+x", "-y", "+z", "+x"],
+        ["+x", "-y", "-z", "+x"],
+        ["+x", "+z", "+y", "+x"],
+        ["+x", "+z", "-y", "+x"],
+        ["+x", "-z", "+y", "+x"],
+        ["+x", "-z", "-y", "+x"],
+        ["-x", "+y", "+z", "-x"],
+        ["-x", "+y", "-z", "-x"],
+        ["-x", "-y", "+z", "-x"],
+        ["-x", "-y", "-z", "-x"],
+        ["-x", "+z", "+y", "-x"],
+        ["-x", "+z", "-y", "-x"],
+        ["-x", "-z", "+y", "-x"],
+        ["-x", "-z", "-y", "-x"],
+        ["+y", "+x", "+z", "+y"],
+        ["+y", "+x", "-z", "+y"],
+        ["+y", "-x", "+z", "+y"],
+        ["+y", "-x", "-z", "+y"],
+        ["+y", "+z", "+x", "+y"],
+        ["+y", "+z", "-x", "+y"],
+        ["+y", "-z", "+x", "+y"],
+        ["+y", "-z", "-x", "+y"],
+        ["-y", "+x", "+z", "-y"],
+        ["-y", "+x", "-z", "-y"],
+        ["-y", "-x", "+z", "-y"],
+        ["-y", "-x", "-z", "-y"],
+        ["-y", "+z", "+x", "-y"],
+        ["-y", "+z", "-x", "-y"],
+        ["-y", "-z", "+x", "-y"],
+        ["-y", "-z", "-x", "-y"],
+        ["+z", "+x", "+y", "+z"],
+        ["+z", "+x", "-y", "+z"],
+        ["+z", "-x", "+y", "+z"],
+        ["+z", "-x", "-y", "+z"],
+        ["+z", "+y", "+x", "+z"],
+        ["+z", "+y", "-x", "+z"],
+        ["+z", "-y", "+x", "+z"],
+        ["+z", "-y", "-x", "+z"],
+        ["-z", "+x", "+y", "-z"],
+        ["-z", "+x", "-y", "-z"],
+        ["-z", "-x", "+y", "-z"],
+        ["-z", "-x", "-y", "-z"],
+        ["-z", "+y", "+x", "-z"],
+        ["-z", "+y", "-x", "-z"],
+        ["-z", "-y", "+x", "-z"],
+        ["-z", "-y", "-x", "-z"],
+    ]
+    if choice == None or choice not in choice_candidates:
+        choice = random.choice(choice_candidates)
+    
+    add_sub_dict = {"+": 1, "-": -1}
+    xyz_idx_dict = {"x": 0, "y": 1, "z": 2}
+    start_pos = [-1, -1, -1]
+    if choice[0][0] == "+":
+        start_pos[xyz_idx_dict[choice[0][1]]] = 0
+    elif choice[0][0] == "-":
+        start_pos[xyz_idx_dict[choice[0][1]]] = l[0] - 1 + l[3] - 1
+    else:
+        raise ValueError(f"choice[0][0] should be either '+' or '-'")
+    
+    if choice[1][0] == "+":
+        start_pos[xyz_idx_dict[choice[1][1]]] = 0
+    elif choice[1][0] == "-":
+        start_pos[xyz_idx_dict[choice[1][1]]] = l[1] - 1
+    else:
+        raise ValueError(f"choice[1][0] should be either '+' or '-'")
+    
+    if choice[2][0] == "+":
+        start_pos[xyz_idx_dict[choice[2][1]]] = 0
+    elif choice[2][0] == "-":
+        start_pos[xyz_idx_dict[choice[2][1]]] = l[2] - 1
+    else:
+        raise ValueError(f"choice[2][0] should be either '+' or '-'")
+    
+    assert start_pos[0] != -1 and start_pos[1] != -1 and start_pos[2] != -1, f"start_pos: {start_pos}"
+    
+    traj = [start_pos]
+    for idx, path in enumerate(choice):
+        pos = deepcopy(traj[-1])
+        pos[xyz_idx_dict[path[1]]] += add_sub_dict[path[0]] * (l[idx] - 1)
+        traj.append(deepcopy(pos))
+        
+    # print(f"choice: {choice} traj: {traj}")
+    return traj
 
 def all_adds(total):
     a = []
@@ -215,125 +247,256 @@ def all_adds(total):
     return set(a)
 
 
-# l1 = [2, 4, 4, 5]
-# l1 = [2, 2, 3, 5]
-# l2 = [5, 4, 4, 2]
+l1 = [3, 7, 7, 4] # 0-15
 
-# traj1 = tarjs_from_ls(l1, choice=0)
-# traj2 = tarjs_from_ls(l1, choice=1)
-# print(is_same_traj(traj1, traj2))
+def all_trajs_from_ls(l, max_xyz):
+    
+    # item in l should be greater than or equal to 2
+    try:
+        assert all([item >= 2 for item in l]), f"all items in l should be greater than or equal to 2, l: {l}"
+        # boundary check
+        assert l[0] + l[3] <= max_xyz, f"l[0] + l[3] should be less than or equal to {max_xyz}, but it is {l[0] + l[3]}"
+        assert l[1] <= max_xyz, f"l[1] should be less than or equal to {max_xyz}, but it is {l[1]}"
+        assert l[2] <= max_xyz, f"l[2] should be less than or equal to {max_xyz}, but it is {l[2]}"
+    except Exception as e:
+        # print(e)
+        return []
+    
+    choice_candidates = [
+        ["+x", "+y", "+z", "+x"],
+        ["+x", "+y", "-z", "+x"],
+        ["+x", "-y", "+z", "+x"],
+        ["+x", "-y", "-z", "+x"],
+        ["+x", "+z", "+y", "+x"],
+        ["+x", "+z", "-y", "+x"],
+        ["+x", "-z", "+y", "+x"],
+        ["+x", "-z", "-y", "+x"],
+        ["-x", "+y", "+z", "-x"],
+        ["-x", "+y", "-z", "-x"],
+        ["-x", "-y", "+z", "-x"],
+        ["-x", "-y", "-z", "-x"],
+        ["-x", "+z", "+y", "-x"],
+        ["-x", "+z", "-y", "-x"],
+        ["-x", "-z", "+y", "-x"],
+        ["-x", "-z", "-y", "-x"],
+        ["+y", "+x", "+z", "+y"],
+        ["+y", "+x", "-z", "+y"],
+        ["+y", "-x", "+z", "+y"],
+        ["+y", "-x", "-z", "+y"],
+        ["+y", "+z", "+x", "+y"],
+        ["+y", "+z", "-x", "+y"],
+        ["+y", "-z", "+x", "+y"],
+        ["+y", "-z", "-x", "+y"],
+        ["-y", "+x", "+z", "-y"],
+        ["-y", "+x", "-z", "-y"],
+        ["-y", "-x", "+z", "-y"],
+        ["-y", "-x", "-z", "-y"],
+        ["-y", "+z", "+x", "-y"],
+        ["-y", "+z", "-x", "-y"],
+        ["-y", "-z", "+x", "-y"],
+        ["-y", "-z", "-x", "-y"],
+        ["+z", "+x", "+y", "+z"],
+        ["+z", "+x", "-y", "+z"],
+        ["+z", "-x", "+y", "+z"],
+        ["+z", "-x", "-y", "+z"],
+        ["+z", "+y", "+x", "+z"],
+        ["+z", "+y", "-x", "+z"],
+        ["+z", "-y", "+x", "+z"],
+        ["+z", "-y", "-x", "+z"],
+        ["-z", "+x", "+y", "-z"],
+        ["-z", "+x", "-y", "-z"],
+        ["-z", "-x", "+y", "-z"],
+        ["-z", "-x", "-y", "-z"],
+        ["-z", "+y", "+x", "-z"],
+        ["-z", "+y", "-x", "-z"],
+        ["-z", "-y", "+x", "-z"],
+        ["-z", "-y", "-x", "-z"],
+    ]
+    trajs = []
+    for idx, choice in enumerate(choice_candidates):
+        traj = tarjs_from_ls(l1, choice=choice)
+        same_traj = False
+        for item in trajs:
+            if is_same_traj(np.array(item), np.array(traj)):
+                same_traj = True
+                break
+        if same_traj:
+            continue
+        trajs.append(deepcopy(traj))
+    return trajs
 
-# plot_shape(elev=30, azim=30, traj=traj1, name='traj1.png')
-# # plot_shape(elev=30, azim=30, traj=traj2, name='traj2.png')
-# plot_shape(elev=225, azim=30, traj=traj1, name="traj2.png")
+def all_trajs_from_ls_v1(l, max_xyz):
+    
+    # item in l should be greater than or equal to 2
+    try:
+        assert all([item >= 2 for item in l]), f"all items in l should be greater than or equal to 2, l: {l}"
+        # boundary check
+        assert l[0] + l[3] <= max_xyz, f"l[0] + l[3] should be less than or equal to {max_xyz}, but it is {l[0] + l[3]}"
+        assert l[1] <= max_xyz, f"l[1] should be less than or equal to {max_xyz}, but it is {l[1]}"
+        assert l[2] <= max_xyz, f"l[2] should be less than or equal to {max_xyz}, but it is {l[2]}"
+    except Exception as e:
+        # print(e)
+        return [], []
+    
+    choice_candidates = [
+        ["+x", "+y", "+z", "+x"],
+        ["+x", "+y", "-z", "+x"],
+        ["+x", "-y", "+z", "+x"],
+        ["+x", "-y", "-z", "+x"],
+        ["+x", "+z", "+y", "+x"],
+        ["+x", "+z", "-y", "+x"],
+        ["+x", "-z", "+y", "+x"],
+        ["+x", "-z", "-y", "+x"],
+        ["-x", "+y", "+z", "-x"],
+        ["-x", "+y", "-z", "-x"],
+        ["-x", "-y", "+z", "-x"],
+        ["-x", "-y", "-z", "-x"],
+        ["-x", "+z", "+y", "-x"],
+        ["-x", "+z", "-y", "-x"],
+        ["-x", "-z", "+y", "-x"],
+        ["-x", "-z", "-y", "-x"],
+        ["+y", "+x", "+z", "+y"],
+        ["+y", "+x", "-z", "+y"],
+        ["+y", "-x", "+z", "+y"],
+        ["+y", "-x", "-z", "+y"],
+        ["+y", "+z", "+x", "+y"],
+        ["+y", "+z", "-x", "+y"],
+        ["+y", "-z", "+x", "+y"],
+        ["+y", "-z", "-x", "+y"],
+        ["-y", "+x", "+z", "-y"],
+        ["-y", "+x", "-z", "-y"],
+        ["-y", "-x", "+z", "-y"],
+        ["-y", "-x", "-z", "-y"],
+        ["-y", "+z", "+x", "-y"],
+        ["-y", "+z", "-x", "-y"],
+        ["-y", "-z", "+x", "-y"],
+        ["-y", "-z", "-x", "-y"],
+        ["+z", "+x", "+y", "+z"],
+        ["+z", "+x", "-y", "+z"],
+        ["+z", "-x", "+y", "+z"],
+        ["+z", "-x", "-y", "+z"],
+        ["+z", "+y", "+x", "+z"],
+        ["+z", "+y", "-x", "+z"],
+        ["+z", "-y", "+x", "+z"],
+        ["+z", "-y", "-x", "+z"],
+        ["-z", "+x", "+y", "-z"],
+        ["-z", "+x", "-y", "-z"],
+        ["-z", "-x", "+y", "-z"],
+        ["-z", "-x", "-y", "-z"],
+        ["-z", "+y", "+x", "-z"],
+        ["-z", "+y", "-x", "-z"],
+        ["-z", "-y", "+x", "-z"],
+        ["-z", "-y", "-x", "-z"],
+    ]
+    trajs_1 = []
+    trajs_2 = []
+    traj_reference = tarjs_from_ls(l1, choice=choice_candidates[0])
+    
+    for idx, choice in enumerate(choice_candidates):
+        traj = tarjs_from_ls(l1, choice=choice)
+        if is_same_traj(np.array(traj_reference), np.array(traj)):
+            trajs_1.append(deepcopy(traj))
+        else:
+            trajs_2.append(deepcopy(traj))
+    return trajs_1, trajs_2
+
 
 import itertools
-# l1_perm = list(itertools.permutations(l1))
-# l1_perm_set = set(l1_perm)
 
-# print(f"len of l1_perm: {len(l1_perm)}")
-# print(f"len of l1_perm_set: {len(l1_perm_set)}")
-# for p in l1_perm:
-#     print(f"perm: {p}")
+angles = [45, 135, 225, 315]
+# angles = [30, 60, 120, 150, 210, 240, 300, 330]
+number_of_blocks = 15 # actual number of blocks = number_of_blocks - 3. Because the blocks at the three corners overlap, they are repeatedly calculated 3 times
+adds = all_adds(number_of_blocks)
 
-
-angles = [30, 60, 120, 150, 210, 240, 300, 330]
-right_candidates_num = 3
-total = 15 # actual number of blocks = total - 3. See trajs_from_ls can understand this relation
-adds = all_adds(total)
-# print(f"adds: {adds}")
-
+print(len(adds))
 datas = []
 for a in adds:
-    data = {}
-    original_traj = tarjs_from_ls(a, choice=0)
-    data["ori"] = {
-        "traj": original_traj,
-        "elev": 30,
-        "azim": 30
-    }
-    data["right"] = []
-    angles_cp = deepcopy(angles)
-    angles_cp.remove(30)
-    # elevs_candidates = np.random.choice(angles_cp, size=right_candidates_num, replace=False)
-    elevs_candidates = np.random.choice([150, 210, 240, 300, 330], size=right_candidates_num, replace=False)
-    for elev in elevs_candidates:
-        data["right"].append(
-            {
-                "traj": original_traj,
-                "elev": elev,
-                "azim": 30
-                # "elev": 30,
-                # "azim": elev
-            }
-        )
-    data["wrong"] = []
-    mirrored_traj = tarjs_from_ls(a, choice=1)
-    if not is_same_traj(original_traj, mirrored_traj):
-        data["wrong"].append(
-                {
-                    "traj": mirrored_traj,
-                    "elev": 30,
-                    "azim": 30
-                }
-            )
-        for elev in elevs_candidates:
-            data["wrong"].append(
-                {
-                    "traj": mirrored_traj,
-                    "elev": elev,
-                    "azim": 30
-                    # "elev": 30,
-                    # "azim": elev
-                }
-            )
-    a_perm_set = set(itertools.permutations(a))
-    for a_perm in a_perm_set:
-        a_perm_original_traj = tarjs_from_ls(a_perm, choice=0)
-        a_perm_mirrored_traj = tarjs_from_ls(a_perm, choice=1)
-        if not is_same_traj(original_traj, a_perm_original_traj):
-            for elev in elevs_candidates:
-                data["wrong"].append(
-                    {
-                        "traj": a_perm_original_traj,
-                        "elev": elev,
-                        "azim": 30
-                        # "elev": 30,
-                        # "azim": elev
-                    }
-                )
-        if not is_same_traj(mirrored_traj, a_perm_mirrored_traj):
-            for elev in elevs_candidates:
-                data["wrong"].append(
-                    {
-                        "traj": a_perm_mirrored_traj,
-                        "elev": elev,
-                        "azim": 30
-                        # "elev": 30,
-                        # "azim": elev
-                    }
-                )
-    # datas.append(data)
-    np.random.shuffle(data["wrong"])
-    actual_data = {}
-    actual_data["ori"] = data["ori"]
-    for right in data["right"]:
-        actual_data["right"] = right
-        for idx in range(0, len(data["wrong"]), 3):
-            if idx + 2 >= len(data["wrong"]):
-                break
-            actual_data["wrong_1"] = data["wrong"][idx]
-            actual_data["wrong_2"] = data["wrong"][idx+1]
-            actual_data["wrong_3"] = data["wrong"][idx+2]
-            datas.append(deepcopy(actual_data))
-            
-# print(f"len of datas: {len(datas)}")
+    trajs_1, trajs_2 = all_trajs_from_ls_v1(a, max_xyz=7)
+    if len(trajs_1) == 0 or len(trajs_2) == 0:
+        continue
+    
+    trajs_1_com = list(itertools.combinations(trajs_1, 2))
+    for item in trajs_1_com:
+        ori = {
+            "traj": item[0],
+            "elev": 45,
+            "azim": 45
+        }
+        right_ = {
+            "traj": item[1],
+            "elev": 45,
+            "azim": 45
+        }
+        wrongs = random.sample(trajs_2, 3)
+        wrong_1 = {
+            "traj": wrongs[0],
+            "elev": 45,
+            "azim": 45
+        }
+        wrong_2 = {
+            "traj": wrongs[1],
+            "elev": 45,
+            "azim": 45
+        }
+        wrong_3 = {
+            "traj": wrongs[2],
+            "elev": 45,
+            "azim": 45
+        }
+        datas.append({
+            "ori": deepcopy(ori),
+            "right": deepcopy(right_),
+            "wrong_1": deepcopy(wrong_1),
+            "wrong_2": deepcopy(wrong_2),
+            "wrong_3": deepcopy(wrong_3)
+        })
+        
+    trajs_2_com = list(itertools.combinations(trajs_2, 2))
+    for item in trajs_2_com:
+        ori = {
+            "traj": item[0],
+            "elev": 45,
+            "azim": 45
+        }
+        right_ = {
+            "traj": item[1],
+            "elev": 45,
+            "azim": 45
+        }
+        wrongs = random.sample(trajs_1, 3)
+        wrong_1 = {
+            "traj": wrongs[0],
+            "elev": 45,
+            "azim": 45
+        }
+        wrong_2 = {
+            "traj": wrongs[1],
+            "elev": 45,
+            "azim": 45
+        }
+        wrong_3 = {
+            "traj": wrongs[2],
+            "elev": 45,
+            "azim": 45
+        }
+        datas.append({
+            "ori": deepcopy(ori),
+            "right": deepcopy(right_),
+            "wrong_1": deepcopy(wrong_1),
+            "wrong_2": deepcopy(wrong_2),
+            "wrong_3": deepcopy(wrong_3)
+        })      
 
-os.makedirs("mrt_data", exist_ok=True)
+print(f"size of datas: {len(datas)}")
+# breakpoint()
+mrt_png_data_path = "/nfs_global/S/tianzikang/project_data/spatial_intelligence/mrt_data/"
+# remove the existing data
+os.system(f"rm -rf {mrt_png_data_path}")
+os.makedirs(mrt_png_data_path, exist_ok=True)
 np.random.shuffle(datas)
 for idx, item in tqdm.tqdm(enumerate(datas)):
-    if idx >= 100:
-        break
+    # if idx >= 100:
+    #     break
     ori = item["ori"]
     right = item["right"]
     wrong_1 = item["wrong_1"]
@@ -343,18 +506,17 @@ for idx, item in tqdm.tqdm(enumerate(datas)):
     wrong_choices = ["A", "B", "C", "D"]
     wrong_choices.remove(right_choice)
     np.random.shuffle(wrong_choices)
-    os.makedirs(f"mrt_data/{idx}", exist_ok=True)
-    plot_shape(elev=ori["elev"], azim=ori["azim"], traj=ori["traj"], name=f"mrt_data/{idx}/ori.png")
-    plot_shape(elev=right["elev"], azim=right["azim"], traj=right["traj"], name=f"mrt_data/{idx}/{right_choice}.png")
-    plot_shape(elev=wrong_1["elev"], azim=wrong_1["azim"], traj=wrong_1["traj"], name=f"mrt_data/{idx}/{wrong_choices[0]}.png")
-    plot_shape(elev=wrong_2["elev"], azim=wrong_2["azim"], traj=wrong_2["traj"], name=f"mrt_data/{idx}/{wrong_choices[1]}.png")
-    plot_shape(elev=wrong_3["elev"], azim=wrong_3["azim"], traj=wrong_3["traj"], name=f"mrt_data/{idx}/{wrong_choices[2]}.png")
-    with open(f"mrt_data/{idx}/answer.json", "w") as f:
+    os.makedirs(f"{mrt_png_data_path}/{idx}", exist_ok=True)
+    plot_shape(elev=ori["elev"], azim=ori["azim"], traj=ori["traj"], name=f"{mrt_png_data_path}/{idx}/ori.png")
+    plot_shape(elev=right["elev"], azim=right["azim"], traj=right["traj"], name=f"{mrt_png_data_path}/{idx}/{right_choice}.png")
+    plot_shape(elev=wrong_1["elev"], azim=wrong_1["azim"], traj=wrong_1["traj"], name=f"{mrt_png_data_path}/{idx}/{wrong_choices[0]}.png")
+    plot_shape(elev=wrong_2["elev"], azim=wrong_2["azim"], traj=wrong_2["traj"], name=f"{mrt_png_data_path}/{idx}/{wrong_choices[1]}.png")
+    plot_shape(elev=wrong_3["elev"], azim=wrong_3["azim"], traj=wrong_3["traj"], name=f"{mrt_png_data_path}/{idx}/{wrong_choices[2]}.png")
+    with open(f"{mrt_png_data_path}/{idx}/answer.json", "w") as f:
         json.dump({"answer": right_choice}, f)
     
-# print("done")
 
-generate_huggingface_datasets = False
+generate_huggingface_datasets = True
 if not generate_huggingface_datasets:
     exit()
     
@@ -447,21 +609,21 @@ c_s = []
 d_s = []
 problem = []
 solution = []
-for d in tqdm.tqdm(os.listdir("./mrt_data")):
-    if os.path.isdir(f"./mrt_data/{d}"):
+for d in tqdm.tqdm(os.listdir(mrt_png_data_path)):
+    if os.path.isdir(f"{mrt_png_data_path}/{d}"):
         problem.append(make_role_prompt())
-        with open(f"./mrt_data/{d}/answer.json", "r") as f:
+        with open(f"{mrt_png_data_path}/{d}/answer.json", "r") as f:
             answer = json.load(f)["answer"]
             solution.append(f"<think>...</think>\n<answer>{answer}</answer>")
-            with Image.open(f"./mrt_data/{d}/ori.png") as img:
+            with Image.open(f"{mrt_png_data_path}/{d}/ori.png") as img:
                 ori.append(img)
-            with Image.open(f"./mrt_data/{d}/A.png") as img:
+            with Image.open(f"{mrt_png_data_path}/{d}/A.png") as img:
                 a_s.append(img)
-            with Image.open(f"./mrt_data/{d}/B.png") as img:
+            with Image.open(f"{mrt_png_data_path}/{d}/B.png") as img:
                 b_s.append(img)
-            with Image.open(f"./mrt_data/{d}/C.png") as img:
+            with Image.open(f"{mrt_png_data_path}/{d}/C.png") as img:
                 c_s.append(img)
-            with Image.open(f"./mrt_data/{d}/D.png") as img:
+            with Image.open(f"{mrt_png_data_path}/{d}/D.png") as img:
                 d_s.append(img)
 
 
@@ -488,6 +650,4 @@ with open(dataset_dict_path, "w") as f:
     json.dump(json_obs, f)
     
 print("Done!")
-
-# os.system(f"rm -rf ./mrt_data")
     
