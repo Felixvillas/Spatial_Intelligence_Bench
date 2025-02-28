@@ -419,7 +419,7 @@ for idx, item in tqdm.tqdm(enumerate(datas)):
         json.dump({"answer": right_choice}, f)
     
 
-generate_huggingface_datasets = False
+generate_huggingface_datasets = True
 if not generate_huggingface_datasets:
     exit()
     
