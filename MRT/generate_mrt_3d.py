@@ -93,24 +93,6 @@ import json, tqdm
 def is_same_traj(traj1, traj2):
     def traverse(traj):
         path = []
-        # for idx in range(len(traj)-2):
-            # vec1 = traj[idx + 1] - traj[idx]
-            # assert np.bool_(vec1).sum() == 1, f"should only 1 element is different from 0 in vec1, vec1: {vec1}"
-            # vec2 = traj[idx + 2] - traj[idx + 1]
-            # assert np.bool_(vec2).sum() == 1, f"should only 1 element is different from 0 in vec2, vec2: {vec2}"
-            
-            # # The dot product of vector vec1 and vector vec2 should be 0.
-            # assert np.dot(vec1, vec2) == 0, f"vec1: {vec1} dot product vec2: {vec2} should be 0"
-            # # The cross product of vector vec1 and vector vec2 is 1 or -1, where 1 means turning counterclockwise and -1 means turning clockwise
-            # cross = np.cross(vec1, vec2)
-            # # Unitalized cross
-            # cross = cross / np.linalg.norm(cross)
-            # assert np.bool_(cross).sum() == 1, f"cross product of vec1: {vec1} and vec2: {vec2} should be unit vector along the x/y/z axis"
-            # cross_str = {-1: "clockwise", 1: "counterclockwise"}[cross.sum()]
-            # # find the idx of the element that is different from 0
-            # path.append(abs(vec1[np.nonzero(vec1)[0][0]]))
-            # path.append(cross_str)
-            
         for idx in range(len(traj)-1):
             vec = traj[idx + 1] - traj[idx]
             assert np.bool_(vec).sum() == 1, f"should only 1 element is different from 0 in vec, vec: {vec}"
