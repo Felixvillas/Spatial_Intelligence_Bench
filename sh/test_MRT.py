@@ -39,7 +39,8 @@ import tqdm
 
 task = "MRT"
 
-task_path = os.path.join("/nfs_global/S/tianzikang/project_data/spatial_intelligence/mrt_data/")
+# task_path = os.path.join("/nfs_global/S/tianzikang/project_data/spatial_intelligence/mrt_data/")
+task_path = os.path.join("./MRT/images/")
 
 # replace placeholder (images) with assets
 
