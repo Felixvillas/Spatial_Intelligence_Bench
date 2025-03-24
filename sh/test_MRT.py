@@ -1,7 +1,9 @@
 import os, json
 import openai
 # model_name = "/lustre/S/tianzikang/LLMs/mistralai-Pixtral-12B-2409/mistralai-Pixtral-12B-2409/" # gpt-4o, gpt-4-turbo
-model_name = "gpt-4o"
+# model_name = "gpt-4o"
+# model_name = "/nfs_global/S/tianzikang/LLMs/Qwen/Qwen-Qwen2.5-VL-7B-Instruct/" # ori
+model_name = "../workdir/saves/Qwen2.5-VL-7B/full/mrt_blocking/checkpoint-14148/" # sft-blocking
 if os.path.isdir(model_name):
     model_name_split = model_name.split("/")
     log_model_name = model_name_split[-1] if model_name_split[-1] else model_name_split[-2]
