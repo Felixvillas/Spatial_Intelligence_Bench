@@ -120,6 +120,7 @@ for idx, specific_task in enumerate(tqdm.tqdm(os.listdir(task_path)[:test_task_n
     completion = client.chat.completions.create(
         model=model_name,
         messages=prompt,
+        max_tokens=2048, 
     )
         
     content = completion.choices[0].message.content
